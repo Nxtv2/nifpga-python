@@ -554,6 +554,7 @@ class _FIFO(object):
             self._datatype = bitfile_fifo.datatype
         self._number = bitfile_fifo.number
         self._session = session
+        self._direction = bitfile_fifo._direction
         self._transfer_size_bytes = bitfile_fifo.transfer_size_bytes
         self._write_func = nifpga["WriteFifo%s" % self._datatype]
         self._read_func = nifpga["ReadFifo%s" % self._datatype]
