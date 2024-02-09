@@ -251,6 +251,59 @@ class Session(object):
         self._nifpga.AcknowledgeIrqs(self._session,
                                      self._irq_ordinals_to_bitmask(irqs))
 
+    def OpenHostMemoryBuffer(self, hmb_name):
+        """
+        Args:
+            hmb_name (str): The name of the HostMemoryBuffer
+
+        Returns:
+            memorySize (ctypes.c_size_t): The Size of the HostMemoryBuffer in Bytes
+            virtualAddress (ctypes.c_void_p): The virtual Address of the HostMemoryBuffer
+                as mapped in the current process
+        """
+        memorySize = ctypes.c_size_t()
+        virtualAddress = ctypes.c_void_p()
+        self._nifpga.OpenHostMemoryBuffer(self._session, bytes(hmb_name, 'ascii'),
+            memorySize, virtualAddress)
+        return memorySize, virtualAddress
+
+    def CloseHostMemoryBuffer(self, hmb_name):
+        """
+        Args:
+            hmb_name (str): The name of the HostMemoryBuffer
+        """
+        self._nifpga.CloseHostMemoryBuffer(self._session, bytes(hmb_name, 'ascii'))
+
+    def OpenLowLatencyBuffer(self, hmb_name):
+        """
+        Args:
+            hmb_name (str): The name of the LowLatencyBuffer
+
+        Returns:
+            memorySizeToHost (ctypes.c_size_t): The Size of the LowLatencyBuffer
+                that is allocated in the Host Memory in Bytes
+            virtualAddressToHost (ctypes.c_void_p): The virtual Address of the LowLatencyBuffer
+                that is allocated in the Host Memory as mapped in the current process
+            memorySizeToFpga (ctypes.c_size_t): The Size of the LowLatencyBuffer
+                that is allocated in the FPGA in Bytes
+            virtualAddressToFpga (ctypes.c_void_p): The virtual Address of the LowLatencyBuffer
+                that is allocated in the FPGA as mapped in the current process
+        """
+        memorySizeToHost = ctypes.c_size_t()
+        virtualAddressToHost = ctypes.c_void_p()
+        memorySizeToFpga = ctypes.c_size_t()
+        virtualAddressToFpga = ctypes.c_void_p()
+        self._nifpga.OpenLowLatencyBuffer(self._session, bytes(hmb_name, 'ascii'),
+            memorySizeToHost, virtualAddressToHost, memorySizeToFpga, virtualAddressToFpga)
+        return memorySizeToHost, virtualAddressToHost, memorySizeToFpga, virtualAddressToFpga
+
+    def CloseLowLatencyBuffer(self, hmb_name):
+        """
+        Args:
+            hmb_name (str): The name of the LowLatencyBuffer
+        """
+        self._nifpga.CloseLowLatencyBuffer(self._session, bytes(hmb_name, 'ascii'))
+
     def _get_unique_register_or_fifo(self, name):
         assert not (name in self._registers and name in self._fifos), \
             "Ambiguous: '%s' is both a register and a FIFO" % name
