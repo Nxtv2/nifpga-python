@@ -596,6 +596,43 @@ class _NiFpga(StatusCheckedLibrary):
                     NamedArgtype("region", ctypes.c_void_p)
                 ]),
         ])
+        # Add HMB functions
+        library_function_infos.extend([
+            LibraryFunctionInfo(
+                pretty_name="OpenHostMemoryBuffer",
+                name_in_library="NiFpgaDll_OpenHmb",
+                named_argtypes=[
+                    NamedArgtype("session", _SessionType),
+                    NamedArgtype("memoryName", ctypes.c_char_p),
+                    NamedArgtype("memorySize", ctypes.POINTER(ctypes.c_size_t)),
+                    NamedArgtype("virtualAddress", ctypes.POINTER(ctypes.c_void_p)),
+                ]),
+            LibraryFunctionInfo(
+                pretty_name="CloseHostMemoryBuffer",
+                name_in_library="NiFpgaDll_CloseHmb",
+                named_argtypes=[
+                    NamedArgtype("session", _SessionType),
+                    NamedArgtype("memoryName", ctypes.c_char_p),
+                ]),
+            LibraryFunctionInfo(
+                pretty_name="OpenLowLatencyBuffer",
+                name_in_library="NiFpgaDll_OpenLlb",
+                named_argtypes=[
+                    NamedArgtype("session", _SessionType),
+                    NamedArgtype("memoryName", ctypes.c_char_p),
+                    NamedArgtype("memorySizeToHost", ctypes.POINTER(ctypes.c_size_t)),
+                    NamedArgtype("virtualAddressToHost", ctypes.POINTER(ctypes.c_void_p)),
+                    NamedArgtype("memorySizeToFpga", ctypes.POINTER(ctypes.c_size_t)),
+                    NamedArgtype("virtualAddressToFpga", ctypes.POINTER(ctypes.c_void_p)),
+                ]),
+            LibraryFunctionInfo(
+                pretty_name="CloseLowLatencyBuffer",
+                name_in_library="NiFpgaDll_CloseLlb",
+                named_argtypes=[
+                    NamedArgtype("session", _SessionType),
+                    NamedArgtype("memoryName", ctypes.c_char_p),
+                ]),
+        ])
         try:
             super(_NiFpga, self).__init__(library_name="NiFpga",
                                           library_function_infos=library_function_infos)
