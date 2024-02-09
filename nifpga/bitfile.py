@@ -664,7 +664,9 @@ class Fifo(object):
     def __init__(self, channel_xml):
         self._name = channel_xml.attrib["name"]
         self._number = int(channel_xml.find("Number").text)
-        self._direction = channel_xml.find("Direction").text
+        self._direction = channel_xml.find("Direction") 
+        if self._direction is not None:
+            self._direction = self._direction.text
         datatype_xml = channel_xml.find("DataType")
         if datatype_xml.find("SubType") is not None:
             self._type = _parse_type(datatype_xml)
