@@ -2,7 +2,7 @@ import os
 import xml.etree.ElementTree as ElementTree
 from collections import OrderedDict
 from decimal import Decimal
-from nifpga import DataType
+from .nifpga import DataType
 from numbers import Number
 from warnings import warn
 import ctypes
